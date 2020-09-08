@@ -82,7 +82,7 @@ var map_card = cardTemplate.cloneNode(true);
 map_card.querySelector('img').setAttribute('src', cards[0].author.avatar);
 map_card.querySelector('.popup__title').textContent = cards[0].offer.title;
 map_card.querySelector('.popup__text--address').textContent = cards[0].offer.address;
-map_card.querySelector('.popup__text--price').innerHTML = cards[0].offer.price + '&#x20bd;<span>/ночь</span>';
+map_card.querySelector('.popup__text--price').innerHTML = cards[0].offer.price + ' &#x20bd;<span>/ночь</span>';
 map_card.querySelector('.popup__type').textContent = cards[0].offer.type;
 map_card.querySelector('.popup__text--capacity').textContent = cards[0].offer.rooms + ' комнаты для ' + cards[0].offer.guests + ' гостей';
 map_card.querySelector('.popup__text--time').textContent = 'Заезд после ' + cards[0].offer.checkin + ', выезд до ' + cards[0].offer.checkout;

@@ -57,8 +57,8 @@ var generateData = function (count) {
 
 var renderPin = function(card) {
   var map_pin = mapPinTemplate.cloneNode(true);
-  map_pin.style.left = (card.location.x + 20) + 'px';
-  map_pin.style.top = (card.location.y + 40) + 'px';
+  map_pin.style.left = (card.location.x + 25) + 'px';
+  map_pin.style.top = (card.location.y + 70) + 'px';
   var map_pin_img = map_pin.querySelector('img');
   map_pin_img.setAttribute('src', card.author.avatar);
   map_pin_img.setAttribute('alt', card.offer.title);

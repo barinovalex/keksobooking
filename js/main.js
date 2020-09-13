@@ -11,6 +11,7 @@ var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map_
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var MainMapPin = document.querySelector('.map__pin--main');
 
+
 function shuffle(array) {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
@@ -26,6 +27,7 @@ var getRandomArr = function (arr) {
   shuffle(arr);
   return arr.slice(0, Math.floor(Math.random() * arr.length));
 };
+
 
 var generateData = function (count) {
   var cards = [];
@@ -60,18 +62,32 @@ var generateData = function (count) {
   return cards;
 };
 
-var renderPin = function(card) {
+var renderPin = function(card, i) {
   var map_pin = mapPinTemplate.cloneNode(true);
   map_pin.style.left = (card.location.x + 25) + 'px';
   map_pin.style.top = (card.location.y + 70) + 'px';
   var map_pin_img = map_pin.querySelector('img');
   map_pin_img.setAttribute('src', card.author.avatar);
   map_pin_img.setAttribute('alt', card.offer.title);
-
+  map_pin.setAttribute('data-index', i);
   return map_pin;
 };
 
+var onEscapeCardKeydown = function (evt) {
+  if (evt.key = 'Escape') {
+    var mapCardOld = document.querySelector('.map__card');
+    if(mapCardOld) {
+      mapCardOld.remove();
+    }
+    document.removeEventListener('keydown', onEscapeCardKeydown);
+  }
+}
+
 var renderMapCard = function (card) {
+  var mapCardOld = document.querySelector('.map__card');
+  if(mapCardOld) {
+    mapCardOld.remove();
+  }
   var map_card = cardTemplate.cloneNode(true);
 
   map_card.querySelector('img').setAttribute('src', card.author.avatar);
@@ -106,6 +122,13 @@ var renderMapCard = function (card) {
   }
 
   document.querySelector('.map__filters-container').before(map_card);
+
+  document.addEventListener('keydown', onEscapeCardKeydown);
+
+  map_card.querySelector('.popup__close').addEventListener('click', function () {
+    map_card.remove();
+    document.removeEventListener('keydown', onEscapeCardKeydown);
+  })
 };
 
 var formFieldsets = document.querySelector('.ad-form').querySelectorAll('fieldset');
@@ -114,12 +137,13 @@ for (var i = 0;i < formFieldsets.length; i++) {
   formFieldsets[i].disabled = true;
 }
 
+var cards = generateData(8);
+
 var activeMapAndForm = function () {
   var fragment = document.createDocumentFragment();
-  var cards = generateData(8);
 
   for (i = 0;i < cards.length;i++) {
-    fragment.appendChild(renderPin(cards[i]));
+    fragment.appendChild(renderPin(cards[i], i));
   }
 
   document.querySelector('.map__pins').appendChild(fragment);
@@ -130,13 +154,20 @@ var activeMapAndForm = function () {
   }
 
   document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+
+  var mapPinButtons = document.querySelectorAll('.map__pin[type="button"]');
+  for (i = 0;i < mapPinButtons.length; i++) {
+    mapPinButtons[i].addEventListener('click', function (evt) {
+      renderMapCard(cards[this.getAttribute('data-index')]);
+    })
+  }
 };
 
 var setAddress = function () {
   var xCoordinate = MainMapPin.offsetLeft + (MAIN_PIN_WIDTH/2);
   var yCoordinate = MainMapPin.offsetTop + MAIN_PIN_HEIGHT;
   document.querySelector('#address').value = xCoordinate + ', ' + yCoordinate;
-}
+};
 
 var onMapPinMousedown = function (evt) {
   if (evt.which === 1) {
@@ -145,7 +176,7 @@ var onMapPinMousedown = function (evt) {
     MainMapPin.removeEventListener('mousedown',onMapPinMousedown);
     MainMapPin.removeEventListener('mousedown',onMapPinKeydown);
   }
-}
+};
 
 var onMapPinKeydown = function (evt) {
   if (evt.key === 'Enter') {
@@ -154,7 +185,7 @@ var onMapPinKeydown = function (evt) {
     MainMapPin.removeEventListener('mousedown',onMapPinKeydown);
     MainMapPin.removeEventListener('mousedown',onMapPinMousedown);
   }
-}
+};
 
 MainMapPin.addEventListener('mousedown',onMapPinMousedown);
 MainMapPin.addEventListener('keydown',onMapPinKeydown);
@@ -164,7 +195,7 @@ var formGuests = document.querySelector('#capacity');
 
 var validateGuests = function () {
   if (formRooms.value == 100) {
-    if (formGuests.value !== 0) {
+    if (formGuests.value != 0) {
       formGuests.setCustomValidity('Для 100 комнат должно быть значение "без гостей"');
     }
     else {
@@ -189,3 +220,7 @@ formRooms.addEventListener('change', function () {
 formGuests.addEventListener('change', function () {
   validateGuests();
 });
+
+
+
+

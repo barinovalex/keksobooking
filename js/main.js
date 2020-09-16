@@ -1,5 +1,9 @@
 var MAIN_PIN_WIDTH = 64;
 var MAIN_PIN_HEIGHT = 86;
+var MIN_BUNGALO_PRICE = 0;
+var MIN_FLAT_PRICE = 1000;
+var MIN_HOUSE_PRICE = 5000;
+var MIN_PALACE_PRICE = 10000;
 
 var avatarNumbers = ['01', '02', '03', '04', '05', '06', '07', '08'];
 var types = ['palace', 'flat', 'house', 'bungalo'];
@@ -213,6 +217,8 @@ var validateGuests = function () {
   }
 };
 
+validateGuests();
+
 formRooms.addEventListener('change', function () {
   validateGuests();
 });
@@ -221,6 +227,40 @@ formGuests.addEventListener('change', function () {
   validateGuests();
 });
 
+var formPrice = document.querySelector('#price');
+var formType = document.querySelector('#type');
 
+var validatePrice = function () {
+ if (formType.value == 'bungalo') {
+   formPrice.min = MIN_BUNGALO_PRICE;
+   formPrice.placeholder = MIN_BUNGALO_PRICE;
+ } else if (formType.value == 'flat') {
+   formPrice.min = MIN_FLAT_PRICE;
+   formPrice.placeholder = MIN_FLAT_PRICE;
+ } else if (formType.value == 'house') {
+   formPrice.min = MIN_HOUSE_PRICE;
+   formPrice.placeholder = MIN_HOUSE_PRICE;
+ } else if (formType.value == 'palace') {
+   formPrice.min = MIN_PALACE_PRICE;
+   formPrice.placeholder = MIN_PALACE_PRICE;
+ }
+   };
+
+validatePrice();
+
+formType.addEventListener('change', function () {
+  validatePrice();
+});
+
+var formTimein = document.querySelector('#timein');
+var formTimeout = document.querySelector('#timeout');
+
+formTimein.addEventListener('change', function () {
+  formTimeout.value = formTimein.value;
+});
+
+formTimeout.addEventListener('change', function () {
+  formTimein.value = formTimeout.value;
+});
 
 

@@ -22,7 +22,7 @@
 
       var mapPinButtons = document.querySelectorAll('.map__pin[type="button"]');
       for (i = 0; i < mapPinButtons.length; i++) {
-        mapPinButtons[i].addEventListener('click', function (evt) {
+        mapPinButtons[i].addEventListener('click', function () {
           window.card.renderMapCard(cards[this.getAttribute('data-index')]);
         });
       }
@@ -35,7 +35,7 @@
       errorElement.style.backgroundColor = 'red';
       var beforeElement = document.querySelector('main');
       document.body.insertBefore(errorElement, beforeElement);
-    }
+    };
 
     window.backend.load(onLoad, onError);
 

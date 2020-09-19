@@ -6,21 +6,40 @@
   var MAP_WIDTH = 1200;
   var MAP_HEIGHT = 704;
   var MainMapPin = document.querySelector('.map__pin--main');
-  var cards = window.data.generateData(8);
   var isMapActive = false;
+  var map = document.querySelector('.map');
 
   var activeMapAndForm = function () {
-
     isMapActive = true;
 
-    var fragment = document.createDocumentFragment();
+    var onLoad = function (cards) {
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < cards.length; i++) {
+        fragment.appendChild(window.pin.renderPin(cards[i], i));
+      }
 
-    for (var i = 0; i < cards.length; i++) {
-      fragment.appendChild(window.pin.renderPin(cards[i], i));
+      document.querySelector('.map__pins').appendChild(fragment);
+
+      var mapPinButtons = document.querySelectorAll('.map__pin[type="button"]');
+      for (i = 0; i < mapPinButtons.length; i++) {
+        mapPinButtons[i].addEventListener('click', function (evt) {
+          window.card.renderMapCard(cards[this.getAttribute('data-index')]);
+        });
+      }
+    };
+
+    var onError = function (message) {
+      var errorElement = document.createElement('div');
+      errorElement.textContent = message;
+      errorElement.style.textAlign = 'center';
+      errorElement.style.backgroundColor = 'red';
+      var beforeElement = document.querySelector('main');
+      document.body.insertBefore(errorElement, beforeElement);
     }
 
-    document.querySelector('.map__pins').appendChild(fragment);
-    document.querySelector('.map').classList.remove('map--faded');
+    window.backend.load(onLoad, onError);
+
+    map.classList.remove('map--faded');
 
     window.form.setAddress(MainMapPin.offsetLeft + (MAIN_PIN_WIDTH / 2), MainMapPin.offsetTop + MAIN_PIN_HEIGHT);
     window.form.toggleFieldsets(false);
@@ -28,13 +47,26 @@
     MainMapPin.removeEventListener('keydown', onMapPinMousedown);
 
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+  };
 
-    var mapPinButtons = document.querySelectorAll('.map__pin[type="button"]');
-    for (i = 0; i < mapPinButtons.length; i++) {
-      mapPinButtons[i].addEventListener('click', function (evt) {
-        window.card.renderMapCard(cards[this.getAttribute('data-index')]);
-      });
+  var resetMap = function () {
+    map.classList.add('map--faded');
+    MainMapPin.style.left = '570px';
+    MainMapPin.style.right = '375px';
+    isMapActive = false;
+    var mapPins = document.querySelector('.map__pins');
+    while (mapPins.lastChild) {
+      if (MainMapPin.isEqualNode(mapPins.lastChild)) {
+        break;
+      }
+      mapPins.lastChild.remove();
     }
+    if (document.querySelector('.map__card')) {
+      document.querySelector('.map__card').remove();
+    }
+
+    MainMapPin.addEventListener('mousedown', onMapPinMousedown);
+    MainMapPin.addEventListener('keydown', onMapPinKeydown);
   };
 
   var onMapPinMousedown = function (evt) {
@@ -98,4 +130,8 @@
 
   MainMapPin.addEventListener('mousedown', onMapPinMousedown);
   MainMapPin.addEventListener('keydown', onMapPinKeydown);
+
+  window.map = {
+    resetMap: resetMap
+  };
 })();

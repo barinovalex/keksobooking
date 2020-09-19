@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var form = document.querySelector('.ad-form');
 
   var toggleFieldsets = function (isDisable) {
     var formFieldsets = document.querySelector('.ad-form').querySelectorAll('fieldset');
@@ -82,6 +83,29 @@
 
   formTimeout.addEventListener('change', function () {
     formTimein.value = formTimeout.value;
+  });
+
+  form.querySelector('.ad-form__reset').addEventListener('click', function () {
+    form.reset();
+  });
+
+  var onLoad = function (response) {
+    form.reset();
+    form.classList.add('ad-form--disabled');
+    toggleFieldsets(true);
+    window.map.resetMap();
+    var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+    window.util.showMessagePopup(successPopup);
+  };
+
+  var onError = function (message) {
+    var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    window.util.showMessagePopup(errorPopup);
+  };
+
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), onLoad, onError);
+    evt.preventDefault();
   });
 
   window.form = {

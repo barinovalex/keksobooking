@@ -32,11 +32,29 @@
     return arr.slice(0, Math.floor(Math.random() * arr.length));
   };
 
+  var showMessagePopup = function (domElement) {
+    document.body.appendChild(domElement);
+    var removePopup = function () {
+      domElement.remove();
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onDocumentKeydown);
+    };
+    var onDocumentClick = function () {
+      removePopup();
+    };
+    var onDocumentKeydown = function (evt) {
+      window.util.isEscapeEvent(evt.key, removePopup);
+    };
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+  };
+
   window.util = {
     shuffle: shuffle,
     getRandomArrElement: getRandomArrElement,
     getRandomArr: getRandomArr,
     isEscapeEvent: isEscapeEvent,
-    isEnterEvent: isEnterEvent
+    isEnterEvent: isEnterEvent,
+    showMessagePopup: showMessagePopup
   }
 })();

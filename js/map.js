@@ -5,27 +5,18 @@
   var MAIN_PIN_HEIGHT = 86;
   var MAP_WIDTH = 1200;
   var MAP_HEIGHT = 704;
+  var pinCount = 5;
   var MainMapPin = document.querySelector('.map__pin--main');
   var isMapActive = false;
   var map = document.querySelector('.map');
+  var loadCards = [];
 
   var activeMapAndForm = function () {
     isMapActive = true;
 
     var onLoad = function (cards) {
-      var fragment = document.createDocumentFragment();
-      for (var i = 0; i < cards.length; i++) {
-        fragment.appendChild(window.pin.renderPin(cards[i], i));
-      }
-
-      document.querySelector('.map__pins').appendChild(fragment);
-
-      var mapPinButtons = document.querySelectorAll('.map__pin[type="button"]');
-      for (i = 0; i < mapPinButtons.length; i++) {
-        mapPinButtons[i].addEventListener('click', function () {
-          window.card.renderMapCard(cards[this.getAttribute('data-index')]);
-        });
-      }
+      loadCards = cards;
+      window.pin.renderPins(cards, pinCount);
     };
 
     var onError = function (message) {
@@ -54,16 +45,8 @@
     MainMapPin.style.left = '570px';
     MainMapPin.style.right = '375px';
     isMapActive = false;
-    var mapPins = document.querySelector('.map__pins');
-    while (mapPins.lastChild) {
-      if (MainMapPin.isEqualNode(mapPins.lastChild)) {
-        break;
-      }
-      mapPins.lastChild.remove();
-    }
-    if (document.querySelector('.map__card')) {
-      document.querySelector('.map__card').remove();
-    }
+    window.pin.removePins();
+    window.card.removeMapCard();
 
     MainMapPin.addEventListener('mousedown', onMapPinMousedown);
     MainMapPin.addEventListener('keydown', onMapPinKeydown);
@@ -131,7 +114,13 @@
   MainMapPin.addEventListener('mousedown', onMapPinMousedown);
   MainMapPin.addEventListener('keydown', onMapPinKeydown);
 
+  var getCards = function () {
+    return loadCards;
+  };
+
   window.map = {
-    resetMap: resetMap
+    resetMap: resetMap,
+    pinCount: pinCount,
+    loadCards: getCards
   };
 })();

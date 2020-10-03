@@ -47,25 +47,9 @@
   var formPrice = document.querySelector('#price');
   var formType = document.querySelector('#type');
 
-  var MIN_BUNGALO_PRICE = 0;
-  var MIN_FLAT_PRICE = 1000;
-  var MIN_HOUSE_PRICE = 5000;
-  var MIN_PALACE_PRICE = 10000;
-
   var validatePrice = function () {
-    if (formType.value == 'bungalo') {
-      formPrice.min = MIN_BUNGALO_PRICE;
-      formPrice.placeholder = MIN_BUNGALO_PRICE;
-    } else if (formType.value == 'flat') {
-      formPrice.min = MIN_FLAT_PRICE;
-      formPrice.placeholder = MIN_FLAT_PRICE;
-    } else if (formType.value == 'house') {
-      formPrice.min = MIN_HOUSE_PRICE;
-      formPrice.placeholder = MIN_HOUSE_PRICE;
-    } else if (formType.value == 'palace') {
-      formPrice.min = MIN_PALACE_PRICE;
-      formPrice.placeholder = MIN_PALACE_PRICE;
-    }
+    formPrice.min = window.data.typeMap[formType.value].minPrice;
+    formPrice.placeholder = window.data.typeMap[formType.value].minPrice;
   };
 
   validatePrice();

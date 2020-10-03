@@ -11,6 +11,24 @@
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var titles = ['Помещение 1', 'Уютная квартира', 'Двухэтажный коттедж', 'Апартаменты в новом билдинге', 'Номер в отеле', 'Уютно и не дорого', 'Все включено', 'Помещение 3'];
   var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+  var typeMap = {
+    bungalo: {
+      name: 'Бунгало',
+      minPrice: 0
+    },
+    flat: {
+      name: 'Квартира',
+      minPrice: 1000
+    },
+    house: {
+      name: 'Дом',
+      minPrice: 5000
+    },
+    palace: {
+      name: 'Дворец',
+      minPrice: 10000
+    },
+  };
 
   var generateData = function (count) {
     var cards = [];
@@ -45,6 +63,7 @@
     return cards;
   };
   window.data = {
-    generateData: generateData
+    generateData: generateData,
+    typeMap: typeMap
   };
 })();

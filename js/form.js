@@ -69,8 +69,16 @@
     formTimein.value = formTimeout.value;
   });
 
+  var resetFormImg = function () {
+    var imagesContainer = document.querySelector('.ad-form__photo');
+    var avatarImg = document.querySelector('.ad-form-header__preview').querySelector('img');
+    imagesContainer.innerHTML = '';
+    avatarImg.src = 'img/muffin-grey.svg';
+  };
+
   form.querySelector('.ad-form__reset').addEventListener('click', function () {
     form.reset();
+    resetFormImg();
   });
 
   var onLoad = function (response) {
@@ -94,7 +102,8 @@
 
   window.form = {
     toggleFieldsets: toggleFieldsets,
-    setAddress: setAddress
+    setAddress: setAddress,
+    resetFormImg: resetFormImg
   };
 })();
 

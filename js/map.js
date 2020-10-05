@@ -47,7 +47,7 @@
     isMapActive = false;
     window.pin.removePins();
     window.card.removeMapCard();
-
+    window.form.resetFormImg();
     MainMapPin.addEventListener('mousedown', onMapPinMousedown);
     MainMapPin.addEventListener('keydown', onMapPinKeydown);
   };
